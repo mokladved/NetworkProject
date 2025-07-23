@@ -64,14 +64,86 @@ class LottoViewController: UIViewController {
         return label
     }()
     
+    let firstButton = {
+        let number = "6"
+        let button = UIButton()
+        button.configuration = .circle(title: number)
+        return button
+    }()
+    
+    override func viewDidLayoutSubviews() {
+        firstButton.layer.cornerRadius = firstButton.frame.height / 2
+        firstButton.clipsToBounds = true
+        for button in numberStackView.arrangedSubviews {
+            button.snp.makeConstraints { make in
+                make.height.equalTo(button.snp.width)
+            }
+        }
+
+    }
+    
+    let secondButton = {
+        let number = "14"
+        let button = UIButton()
+        button.configuration = .circle(title: number)
+        return button
+    }()
+    
+    let thirdButton = {
+        let number = "16"
+        let button = UIButton()
+        button.configuration = .circle(title: number)
+        return button
+    }()
+    
+    let fourthButton = {
+        let number = "21"
+        let button = UIButton()
+        button.configuration = .circle(title: number)
+        return button
+    }()
+    
+    let fifthButton = {
+        let number = "27"
+        let button = UIButton()
+        button.configuration = .circle(title: number)
+        return button
+    }()
+    
+    let sixthButton = {
+        let number = "37"
+        let button = UIButton()
+        button.configuration = .circle(title: number)
+        return button
+    }()
+    
+    let plusButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "plus"), for: .normal)
+        return button
+    }()
+    
+    let bonusButton = {
+        let number = "40"
+        let button = UIButton()
+        button.configuration = .circle(title: number)
+        return button
+    }()
+    
+    let numberStackView = {
+        let sv = UIStackView()
+        sv.spacing = 10
+        sv.axis = .horizontal
+        sv.distribution = .fillEqually
+        return sv
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureHierarchy()
         configureLayout()
         configureView()
     }
-    
-
 }
 
 extension LottoViewController: ViewDesignProtocol {
@@ -82,6 +154,17 @@ extension LottoViewController: ViewDesignProtocol {
         labelWrappedView.addSubview(dateLabel)
         view.addSubview(lineView)
         view.addSubview(resultLabel)
+        
+        view.addSubview(numberStackView)
+        numberStackView.addArrangedSubview(firstButton)
+        numberStackView.addArrangedSubview(secondButton)
+        numberStackView.addArrangedSubview(thirdButton)
+        numberStackView.addArrangedSubview(fourthButton)
+        numberStackView.addArrangedSubview(fifthButton)
+        numberStackView.addArrangedSubview(sixthButton)
+        numberStackView.addArrangedSubview(plusButton)
+        numberStackView.addArrangedSubview(bonusButton)
+        
     }
     
     func configureLayout() {
@@ -118,6 +201,14 @@ extension LottoViewController: ViewDesignProtocol {
             make.top.equalTo(lineView.snp.bottom).offset(30)
             make.centerX.equalTo(view.safeAreaLayoutGuide)
         }
+        
+        numberStackView.snp.makeConstraints { make in
+            make.horizontalEdges.equalTo(labelWrappedView)
+            make.top.equalTo(resultLabel.snp.bottom).offset(20)
+            make.height.equalTo(50)
+            
+        }
+    
     }
     
     func configureView() {

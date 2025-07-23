@@ -58,10 +58,6 @@ final class ViewController: UIViewController {
             break
         }
     }
-    
-    
-
-
 }
 
 extension ViewController: ViewDesignProtocol {
