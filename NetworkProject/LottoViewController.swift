@@ -15,12 +15,31 @@ class LottoViewController: UIViewController {
         return textField
     }()
     
+    let labelWrappedView = {
+        let view = UIView()
+        return view
+    }()
+    
+    let infoLabel = {
+        let label = UILabel()
+        return label
+    }()
+    
+    let dateLabel = {
+        let label = UILabel()
+        return label
+    }()
+    
+    let lineView = {
+        let view = UIView()
+        return view
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureHierarchy()
         configureLayout()
         configureView()
-
     }
     
 
@@ -29,6 +48,10 @@ class LottoViewController: UIViewController {
 extension LottoViewController: ViewDesignProtocol {
     func configureHierarchy() {
         view.addSubview(textField)
+        view.addSubview(labelWrappedView)
+        labelWrappedView.addSubview(infoLabel)
+        labelWrappedView.addSubview(dateLabel)
+        view.addSubview(lineView)
     }
     
     func configureLayout() {
