@@ -30,7 +30,6 @@ class BoxOfficeViewController: UIViewController {
         
         configuration.baseForegroundColor = .black
         configuration.baseBackgroundColor = .white
-        
     
         var attributedTitle = AttributedString("검색")
         attributedTitle.font = .systemFont(ofSize: 15)
@@ -60,6 +59,11 @@ extension BoxOfficeViewController: ViewDesignProtocol {
     }
     
     func configureLayout() {
+        tableView.snp.makeConstraints { make in
+            make.top.equalTo(searchButton.snp.bottom).offset(20)
+            make.horizontalEdges.bottom.equalTo(view.safeAreaLayoutGuide)
+
+        }
         searchButton.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide).offset(44)
             make.trailing.equalTo(view.safeAreaLayoutGuide).inset(20)
@@ -84,8 +88,12 @@ extension BoxOfficeViewController: ViewDesignProtocol {
     
     func configureView() {
         view.backgroundColor = .black
+        tableView.backgroundColor = .clear
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.register(BOTableViewCell.self, forCellReuseIdentifier: BOTableViewCell.identifier)
+        tableView.rowHeight = UITableView.automaticDimension
+
     }
     
     
@@ -97,10 +105,12 @@ extension BoxOfficeViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: BOTableViewCell.identifier, for: indexPath)
-        
+        let cell = tableView.dequeueReusableCell(withIdentifier: BOTableViewCell.identifier, for: indexPath) as! BOTableViewCell
+        let movie = movieInfo[indexPath.row]
+        let rank = indexPath.row + 1
+        let data = (movie: movie, rank: rank)
+        cell.configure(from: data)
+        cell.backgroundColor = .clear
         return cell
     }
-    
-    
 }
