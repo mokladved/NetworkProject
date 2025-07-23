@@ -10,6 +10,9 @@ import UIKit
 class BoxOfficeViewController: UIViewController {
     let movieInfo = MovieInfo.movies
     
+    var filteredMovieInfo: [Movie] = []
+
+    
     let tableView = UITableView()
     
     let searchTextField = {
@@ -44,9 +47,30 @@ class BoxOfficeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        filteredMovieInfo = movieInfo
         configureHierarchy()
         configureLayout()
         configureView()
+        configureAction()
+    }
+    
+    func configureAction() {
+        searchTextField.addTarget(self, action: #selector(textFieldReturned), for: .editingDidEndOnExit)
+        searchButton.addTarget(self, action: #selector(searchButtonTapped), for: .touchUpInside)
+    }
+    
+    func executeSearch() {
+        filteredMovieInfo = Array(movieInfo.shuffled().prefix(10))
+        tableView.reloadData()
+        view.endEditing(true)
+    }
+
+    @objc private func textFieldReturned() {
+        executeSearch()
+    }
+
+    @objc private func searchButtonTapped() {
+        executeSearch()
     }
 }
 
@@ -101,12 +125,12 @@ extension BoxOfficeViewController: ViewDesignProtocol {
 
 extension BoxOfficeViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return movieInfo.count
+        return filteredMovieInfo.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: BOTableViewCell.identifier, for: indexPath) as! BOTableViewCell
-        let movie = movieInfo[indexPath.row]
+        let movie = filteredMovieInfo[indexPath.row]
         let rank = indexPath.row + 1
         let data = (movie: movie, rank: rank)
         cell.configure(from: data)
