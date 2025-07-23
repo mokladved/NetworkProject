@@ -20,4 +20,15 @@ extension UIButton.Configuration {
         
         return configuration
     }
+    
+    static func circle(title: String) -> UIButton.Configuration {
+        var configuration = UIButton.Configuration.filled()
+        configuration.baseForegroundColor = .white
+        configuration.cornerStyle = .capsule
+        
+        var attributedTitle = AttributedString(title)
+        attributedTitle.font = .systemFont(ofSize: 15, weight: .semibold)
+        configuration.attributedTitle = attributedTitle
+        return configuration
+    }
 }
