@@ -9,6 +9,13 @@ import UIKit
 import SnapKit
 
 class LottoViewController: UIViewController {
+    
+    let rounds = Array(1...1181)
+    
+    let pickerView = {
+        let pickerView = UIPickerView()
+        return pickerView
+    }()
 
     let textField = {
         let textField = LottoTextField()
@@ -213,7 +220,23 @@ extension LottoViewController: ViewDesignProtocol {
     
     func configureView() {
         view.backgroundColor = .white
+        pickerView.delegate = self
+        pickerView.dataSource = self
+        textField.inputView = pickerView
+    }
+}
+
+extension LottoViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return rounds.count
     }
     
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return "\(rounds[row])"
+    }
     
 }
