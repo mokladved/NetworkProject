@@ -8,9 +8,9 @@
 import UIKit
 import SnapKit
 
-class ViewController: UIViewController {
+final class ViewController: UIViewController {
     
-    let buttonStackView = {
+    private let buttonStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.spacing = 20
@@ -18,14 +18,14 @@ class ViewController: UIViewController {
         return stackView
     }()
     
-    let lottoButton = {
+    private let lottoButton = {
         let button = UIButton()
         button.configuration = .myStyle(title: "로또")
         return button
         
     }()
     
-    let movieButton = {
+    private let movieButton = {
         let button = UIButton()
         button.configuration = .myStyle(title: "박스오피스")
         return button
@@ -37,6 +37,8 @@ class ViewController: UIViewController {
         configureLayout()
         configureView()
     }
+    
+    
 
 
 }
