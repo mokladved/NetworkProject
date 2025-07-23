@@ -20,6 +20,7 @@ final class ViewController: UIViewController {
     
     private let lottoButton = {
         let button = UIButton()
+        button.tag = 0
         button.configuration = .myStyle(title: "로또")
         return button
         
@@ -27,6 +28,7 @@ final class ViewController: UIViewController {
     
     private let movieButton = {
         let button = UIButton()
+        button.tag = 1
         button.configuration = .myStyle(title: "박스오피스")
         return button
     }()
@@ -36,6 +38,25 @@ final class ViewController: UIViewController {
         configureHierarchy()
         configureLayout()
         configureView()
+        configureButtonAction()
+    }
+    
+    private func configureButtonAction() {
+        lottoButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
+        movieButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
+    }
+    
+    @objc private func buttonTapped(_ sender: UIButton) {
+        switch sender.tag {
+        case 0:
+            let lottoVC = LottoViewController()
+            present(lottoVC, animated: true)
+        case 1:
+            let BoxVC = BoxOfficeViewController()
+            present(BoxVC, animated: true)
+        default:
+            break
+        }
     }
     
     
