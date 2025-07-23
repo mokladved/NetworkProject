@@ -41,6 +41,29 @@ class LottoViewController: UIViewController {
         return view
     }()
     
+    let resultLabel = {
+        let label = UILabel()
+        
+        let roundNumber = "913회"
+        let fixedText = "당첨결과"
+        let resultText = "\(roundNumber) \(fixedText)"
+        let attributedText = NSMutableAttributedString(string: resultText)
+        let frontRange = (resultText as NSString).range(of: roundNumber)
+        let backRange = (resultText as NSString).range(of: fixedText)
+        let frontAttributes: [NSAttributedString.Key: Any] = [
+            .foregroundColor: UIColor.systemYellow,
+            .font: UIFont.systemFont(ofSize: 20, weight: .bold)
+        ]
+        let backAttributes: [NSAttributedString.Key: Any] = [
+            .foregroundColor: UIColor.black,
+            .font: UIFont.systemFont(ofSize: 20, weight: .semibold)
+        ]
+        attributedText.addAttributes(frontAttributes, range: frontRange)
+        attributedText.addAttributes(backAttributes, range: backRange)
+        label.attributedText = attributedText
+        return label
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureHierarchy()
@@ -58,6 +81,7 @@ extension LottoViewController: ViewDesignProtocol {
         labelWrappedView.addSubview(infoLabel)
         labelWrappedView.addSubview(dateLabel)
         view.addSubview(lineView)
+        view.addSubview(resultLabel)
     }
     
     func configureLayout() {
@@ -88,6 +112,11 @@ extension LottoViewController: ViewDesignProtocol {
             make.top.equalTo(labelWrappedView.snp.bottom).offset(10)
             make.horizontalEdges.equalTo(labelWrappedView)
             make.height.equalTo(1)
+        }
+        
+        resultLabel.snp.makeConstraints { make in
+            make.top.equalTo(lineView.snp.bottom).offset(30)
+            make.centerX.equalTo(view.safeAreaLayoutGuide)
         }
     }
     
