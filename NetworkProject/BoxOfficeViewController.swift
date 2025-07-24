@@ -10,6 +10,7 @@ import Alamofire
 
 final class BoxOfficeViewController: UIViewController {
     let apiKey = Key.apiKey
+    private let defaultDate = "20250723"
     
     private let movieInfo = MovieInfo.movies
     private var filteredMovieInfo: [MovieInfoDetail] = []
@@ -53,7 +54,7 @@ final class BoxOfficeViewController: UIViewController {
         configureLayout()
         configureView()
         configureAction()
-        callRequest(for: "20250723")
+        callRequest(for: defaultDate)
     }
     
     private func configureAction() {
