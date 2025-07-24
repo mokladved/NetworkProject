@@ -12,6 +12,7 @@ import Alamofire
 final class LottoViewController: UIViewController {
     
     private let rounds = Array(1...1181)
+    private let defaultRound = 1181
     
     private let pickerView = {
         let pickerView = UIPickerView()
@@ -67,7 +68,7 @@ final class LottoViewController: UIViewController {
         configureHierarchy()
         configureLayout()
         configureView()
-        callRequest(for: 1181)
+        callRequest(for: defaultRound)
     }
 }
 
