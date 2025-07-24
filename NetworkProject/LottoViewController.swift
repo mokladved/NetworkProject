@@ -12,7 +12,6 @@ import Alamofire
 final class LottoViewController: UIViewController {
     
     private let rounds = Array(1...1181)
-    private let lottoNumbers = [6, 14, 16, 21, 27, 37, 40]
     
     private let pickerView = {
         let pickerView = UIPickerView()
@@ -258,8 +257,6 @@ extension LottoViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        
-        
         let round = rounds[row]
         callRequest(for: round)
         textField.text = "\(round)"
