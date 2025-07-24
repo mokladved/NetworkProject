@@ -8,7 +8,7 @@
 import UIKit
 
 class LottoTextField: UITextField {
-    override init(frame: CGRect) {
+    override init(frame: CGRect) {                                       
         super.init(frame: frame)
         self.layer.cornerRadius = 5
         self.layer.borderColor = UIColor.lightGray.cgColor

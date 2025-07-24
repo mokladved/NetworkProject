@@ -83,11 +83,11 @@ extension BOTableViewCell: ViewDesignProtocol {
 }
 
 extension BOTableViewCell: Configurable {
-    typealias Data = (movie: Movie, rank: Int)
+    typealias Data = MovieInfoDetail
     
     func configure(from data: Data) {
-        movieTitleLabel.text = data.movie.title
-        dateLabel.text = data.movie.formatDate
+        movieTitleLabel.text = data.movieNm
+        dateLabel.text = data.openDt
         var configuration = rankButton.configuration
         var attributedTitle = AttributedString("\(data.rank)")
         attributedTitle.font = .systemFont(ofSize: 14, weight: .bold)

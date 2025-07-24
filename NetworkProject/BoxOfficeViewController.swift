@@ -6,18 +6,20 @@
 //
 
 import UIKit
+import Alamofire
 
 final class BoxOfficeViewController: UIViewController {
+    let apiKey = Key.apiKey
+    
     private let movieInfo = MovieInfo.movies
-    
-    private var filteredMovieInfo: [Movie] = []
+    private var filteredMovieInfo: [MovieInfoDetail] = []
 
-    
     private let tableView = UITableView()
     
     private let searchTextField = {
         let textField = UITextField()
         textField.borderStyle = .none
+        textField.textColor = .white
         return textField
     }()
     
@@ -47,11 +49,11 @@ final class BoxOfficeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        filteredMovieInfo = movieInfo
         configureHierarchy()
         configureLayout()
         configureView()
         configureAction()
+        callRequest(for: "20250723")
     }
     
     private func configureAction() {
@@ -60,9 +62,22 @@ final class BoxOfficeViewController: UIViewController {
     }
     
     private func executeSearch() {
-        filteredMovieInfo = Array(movieInfo.shuffled().prefix(10))
+        let date = searchTextField.text
+        guard let date = isValid(of: date) else {
+            return
+        }
+        callRequest(for: date)
         tableView.reloadData()
         view.endEditing(true)
+    }
+    
+    private func isValid(of data: String?) -> String? {
+        guard let date = data,
+              !date.trimmingCharacters(in: .whitespaces).isEmpty,
+              let _ = Int(date) else {
+            return nil
+        }
+        return date
     }
 
     @objc private func textFieldReturned() {
@@ -117,10 +132,7 @@ extension BoxOfficeViewController: ViewDesignProtocol {
         tableView.delegate = self
         tableView.register(BOTableViewCell.self, forCellReuseIdentifier: BOTableViewCell.identifier)
         tableView.rowHeight = UITableView.automaticDimension
-
     }
-    
-    
 }
 
 extension BoxOfficeViewController: UITableViewDelegate, UITableViewDataSource {
@@ -130,11 +142,28 @@ extension BoxOfficeViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: BOTableViewCell.identifier, for: indexPath) as! BOTableViewCell
-        let movie = filteredMovieInfo[indexPath.row]
-        let rank = indexPath.row + 1
-        let data = (movie: movie, rank: rank)
-        cell.configure(from: data)
+        let movieInfo = filteredMovieInfo[indexPath.row]
+        cell.configure(from: movieInfo)
         cell.backgroundColor = .clear
         return cell
+    }
+}
+
+extension BoxOfficeViewController: Networkable {
+    typealias Data = String
+    
+    func callRequest(for date: Data) {
+        let url = "https://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=\(apiKey)&targetDt=\(date)"
+        AF.request(url, method: .get)
+            .validate(statusCode: 200..<300)
+            .responseDecodable(of: BoxOffice.self) { response in
+                switch response.result {
+                case .success(let value):
+                    self.filteredMovieInfo = value.boxOfficeResult.dailyBoxOfficeList
+                    self.tableView.reloadData()
+                case .failure(let error):
+                    print(error)
+            }
+        }
     }
 }
