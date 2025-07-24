@@ -7,27 +7,27 @@
 
 import UIKit
 
-class BoxOfficeViewController: UIViewController {
-    let movieInfo = MovieInfo.movies
+final class BoxOfficeViewController: UIViewController {
+    private let movieInfo = MovieInfo.movies
     
-    var filteredMovieInfo: [Movie] = []
+    private var filteredMovieInfo: [Movie] = []
 
     
-    let tableView = UITableView()
+    private let tableView = UITableView()
     
-    let searchTextField = {
+    private let searchTextField = {
         let textField = UITextField()
         textField.borderStyle = .none
         return textField
     }()
     
-    let lineView = {
+    private let lineView = {
         let view = UIView()
         view.backgroundColor = .white
         return view
     }()
     
-    let searchButton = {
+    private let searchButton = {
         let button = UIButton()
         var configuration = UIButton.Configuration.filled()
         
@@ -54,12 +54,12 @@ class BoxOfficeViewController: UIViewController {
         configureAction()
     }
     
-    func configureAction() {
+    private func configureAction() {
         searchTextField.addTarget(self, action: #selector(textFieldReturned), for: .editingDidEndOnExit)
         searchButton.addTarget(self, action: #selector(searchButtonTapped), for: .touchUpInside)
     }
     
-    func executeSearch() {
+    private func executeSearch() {
         filteredMovieInfo = Array(movieInfo.shuffled().prefix(10))
         tableView.reloadData()
         view.endEditing(true)
