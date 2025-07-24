@@ -59,7 +59,7 @@ final class LottoViewController: UIViewController {
         sv.spacing = 5
         sv.axis = .horizontal
         sv.distribution = .equalSpacing
-        sv.alignment = .center
+        sv.alignment = .firstBaseline
         return sv
     }()
     
@@ -139,8 +139,27 @@ extension LottoViewController {
         numberStackView.addArrangedSubview(plusButton)
         
         let bonusColor = getColor(for: bonus)
-        let bonusButton = configureNumbersButtonUI(with: "\(bonus)", color: bonusColor)
-        numberStackView.addArrangedSubview(bonusButton)
+        let bonusView = createBonusStackView(with: "\(bonus)", color: bonusColor)
+        numberStackView.addArrangedSubview(bonusView)
+        }
+    
+    private func createBonusStackView(with title: String, color: UIColor) -> UIStackView {
+            let stackView = UIStackView()
+            stackView.axis = .vertical
+            stackView.spacing = 4
+            stackView.alignment = .center
+
+            let button = configureNumbersButtonUI(with: title, color: color)
+
+            let label = UILabel()
+            label.text = "보너스"
+            label.font = .systemFont(ofSize: 12)
+            label.textColor = .darkGray
+
+            stackView.addArrangedSubview(button)
+            stackView.addArrangedSubview(label)
+
+            return stackView
         }
     
     private func configureNumbersButtonUI(with title: String, color: UIColor) -> UIButton {
@@ -224,8 +243,6 @@ extension LottoViewController: ViewDesignProtocol {
         numberStackView.snp.makeConstraints { make in
             make.horizontalEdges.equalTo(labelWrappedView)
             make.top.equalTo(resultLabel.snp.bottom).offset(20)
-            make.height.equalTo(44)
-            
         }
         
         for button in numberStackView.arrangedSubviews {
