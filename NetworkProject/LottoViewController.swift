@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Alamofire
 
 final class LottoViewController: UIViewController {
     
@@ -67,39 +68,36 @@ final class LottoViewController: UIViewController {
         configureHierarchy()
         configureLayout()
         configureView()
-        updateResultUI(for: 1)
+        callRequest(for: 1181)
     }
 }
 
 extension LottoViewController {
     private func getColor(for number: Int) -> UIColor {
-            switch number {
-            case 1...10:
-                return .systemYellow
-            case 11...20:
-                return .systemBlue
-            case 21...30:
-                return .systemRed
-            case 31...40:
-                return .systemGray
-            default:
-                return .systemGreen
-            }
+        switch number {
+        case 1...10:
+            return .systemYellow
+        case 11...20:
+            return .systemBlue
+        case 21...30:
+            return .systemRed
+        case 31...40:
+            return .systemGray
+        default:
+            return .systemGreen
         }
+    }
     
-    private func updateResultUI(for round: Int) {
+    private func updateResultUI(from data: Lotto) {
+        let round = data.drwNo
+        let date = data.drwNoDate
         updateResultLabel(for: round)
-                
-        dateLabel.text = "2020-05-30 추첨"
-        var winningNumbers = Set<Int>()
-        
-        while winningNumbers.count < 7 {
-            let randomNumber = Int.random(in: 1...45)
-            winningNumbers.insert(randomNumber)
-        }
-        let result = winningNumbers.sorted()
-        let sixNumbers = Array(result.prefix(6))
-        let bonus = result.last!
+            
+        dateLabel.text = "\(date)"
+
+        let winningNumbers = [data.drwtNo1, data.drwtNo2, data.drwtNo3, data.drwtNo4, data.drwtNo5, data.drwtNo6]
+        let sixNumbers = winningNumbers.sorted()
+        let bonus = data.bnusNo
     
         updateLotto(numbers: sixNumbers, bonus: bonus)
     }
@@ -260,11 +258,30 @@ extension LottoViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        
+        
         let round = rounds[row]
+        callRequest(for: round)
         textField.text = "\(round)"
-        updateResultUI(for: round)
             
         view.endEditing(true)
     }
     
+}
+
+extension LottoViewController: Networkable {
+    typealias Data = Int
+    func callRequest(for data: Data) {
+        let url = "https://www.dhlottery.co.kr/common.do?method=getLottoNumber&drwNo=\(data)"
+        AF.request(url  , method: .get)
+            .validate(statusCode: 200..<300)
+            .responseDecodable(of: Lotto.self) { response in
+                switch response.result {
+                case .success(let value):
+                    self.updateResultUI(from: value)
+                case .failure(let error):
+                    print(error)
+                }
+        }
+    }
 }
