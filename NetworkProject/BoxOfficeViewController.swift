@@ -9,7 +9,7 @@ import UIKit
 import Alamofire
 
 final class BoxOfficeViewController: UIViewController {
-    let apiKey = Key.apiKey
+    private let apiKey = Key.apiKey
     private let defaultDate = "20250723"
     
     private let movieInfo = MovieInfo.movies
