@@ -54,12 +54,38 @@ final class BoxOfficeViewController: UIViewController {
         configureLayout()
         configureView()
         configureAction()
-        callRequest(for: defaultDate)
+        fetchDefaultInfo()
+    }
+    
+    private func fetchDefaultInfo() {
+        let yesterday = findOutYesterDay()
+        searchTextField.text = yesterday
+        callRequest(for: yesterday)
     }
     
     private func configureAction() {
         searchTextField.addTarget(self, action: #selector(textFieldReturned), for: .editingDidEndOnExit)
         searchButton.addTarget(self, action: #selector(searchButtonTapped), for: .touchUpInside)
+    }
+    
+    private func findOutYesterDay() -> String {
+        let today = Date()
+        var calendar = Calendar.current
+        
+        guard let koreaTimeZone = TimeZone(identifier: "Asia/Seoul") else {
+            return ""
+        }
+        calendar.timeZone = koreaTimeZone
+        
+        guard let yesterday = calendar.date(byAdding: .day, value: -1, to: today) else {
+           return defaultDate
+        }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMMdd"
+        formatter.timeZone = koreaTimeZone
+        let dateString = formatter.string(from: yesterday)
+
+        return dateString
     }
     
     private func executeSearch() {
