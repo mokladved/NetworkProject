@@ -11,3 +11,8 @@ protocol Configurable {
     associatedtype Data
     func configure(from data: Data)
 }
+
+protocol Networkable {
+    associatedtype Data
+    func callRequest(for data: Data)
+}
