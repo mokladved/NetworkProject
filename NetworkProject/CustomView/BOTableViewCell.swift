@@ -7,11 +7,11 @@
 
 import UIKit
 
-class BOTableViewCell: UITableViewCell {
+final class BOTableViewCell: UITableViewCell {
 
     static let identifier = "BOTableViewCell"
     
-    let rankButton = {
+    private let rankButton = {
         let button = UIButton()
         var configuration = UIButton.Configuration.filled()
         configuration.baseBackgroundColor = .white
@@ -22,7 +22,7 @@ class BOTableViewCell: UITableViewCell {
         return button
     }()
     
-    let movieTitleLabel = {
+    private let movieTitleLabel = {
         let label = UILabel()
         label.textColor = .white
         label.font = .systemFont(ofSize: 15, weight: .semibold)
@@ -30,7 +30,7 @@ class BOTableViewCell: UITableViewCell {
         
     }()
     
-    let dateLabel = {
+    private let dateLabel = {
         let label = UILabel()
         label.textColor = .white
         label.font = .systemFont(ofSize: 13)
