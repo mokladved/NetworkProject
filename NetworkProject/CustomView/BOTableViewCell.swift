@@ -65,15 +65,19 @@ extension BOTableViewCell: ViewDesignProtocol {
             make.centerY.equalTo(contentView)
         }
         
+        
+
         movieTitleLabel.snp.makeConstraints { make in
             make.leading.equalTo(rankButton.snp.trailing).offset(20)
             make.centerY.equalTo(contentView)
-            make.trailing.lessThanOrEqualTo(dateLabel.snp.leading).offset(-12)
         }
         
+        
+        dateLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
         dateLabel.snp.makeConstraints { make in
             make.trailing.equalTo(contentView.snp.trailing).inset(20)
             make.centerY.equalTo(contentView)
+            make.leading.greaterThanOrEqualTo(movieTitleLabel.snp.trailing).offset(20)
         }
     }
     
